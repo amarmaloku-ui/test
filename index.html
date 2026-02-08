@@ -613,6 +613,23 @@
             color: #666;
         }
 
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            margin: 5px auto;
+            -webkit-transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+            background-color: #fff;
+        }
+
         /* Utility Animations */
         @keyframes fadeUp {
             to {
@@ -634,6 +651,10 @@
 
         /* Responsive */
         @media (max-width: 900px) {
+            .hero {
+                background-attachment: scroll;
+            }
+
             h1 {
                 font-size: 2.8rem;
             }
