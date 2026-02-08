@@ -631,6 +631,10 @@
         }
 
         /* Utility Animations */
+        .mobile-bottom-nav {
+            display: none;
+        }
+
         @keyframes fadeUp {
             to {
                 opacity: 1;
@@ -653,6 +657,16 @@
         @media (max-width: 900px) {
             .hero {
                 background-attachment: scroll;
+                background-position: center;
+                background-size: cover;
+                min-height: 100vh;
+            }
+
+            /* Ensure hero content is visible immediately on mobile */
+            .hero-content {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+                animation: none !important;
             }
 
             h1 {
@@ -746,6 +760,74 @@
             .menu-item {
                 opacity: 1 !important;
                 transform: translateY(0) !important;
+            }
+
+            /* Mobile Bottom Nav Styles */
+            .mobile-bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                background: rgba(15, 15, 15, 0.95);
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 50px;
+                justify-content: space-around;
+                align-items: center;
+                padding: 15px;
+                z-index: 9999;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            }
+
+            .nav-item {
+                color: #fff;
+                text-decoration: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 0.75rem;
+                gap: 5px;
+            }
+
+            .nav-item i {
+                font-size: 1.2rem;
+                color: var(--secondary-color);
+            }
+
+            /* Mobile Card Layout - List View */
+            .menu-item {
+                display: flex;
+                flex-direction: row;
+                height: auto;
+                min-height: 140px;
+            }
+
+            .menu-img-wrapper {
+                width: 40%;
+                height: auto;
+                flex-shrink: 0;
+            }
+
+            .menu-content {
+                width: 60%;
+                padding: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            /* Thumb-friendly buttons */
+            .category-btn {
+                padding: 12px 20px;
+                /* Larger touch target */
+                margin: 5px;
+            }
+
+            /* Add padding to body so bottom nav doesn't cover content */
+            body {
+                padding-bottom: 80px;
             }
         }
     </style>
@@ -911,6 +993,26 @@
                 <p id="modalDesc">Dish description goes here.</p>
             </div>
         </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="#home" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#food" class="nav-item">
+            <i class="fas fa-utensils"></i>
+            <span>Menu</span>
+        </a>
+        <a href="tel:+38344123456" class="nav-item">
+            <i class="fas fa-phone"></i>
+            <span>Call</span>
+        </a>
+        <a href="#contact" class="nav-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Map</span>
+        </a>
     </div>
 
     <script>
