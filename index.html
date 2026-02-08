@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,612 +8,799 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
+        /* Base Reset & Variables */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none;
+            /* Hide default cursor for custom one */
         }
-        
+
         :root {
-             --primary-color: #c62828;
+            --primary-color: #c62828;
             --secondary-color: #ff9800;
-            --dark-color: #1a1a1a;
-            --light-color: #f5f5f5;
-            --accent-color: #2e7d32;
-            --text-color: #333;
-            --text-light: #ec9f05;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --dark-color: #0f0f0f;
+            --light-color: #f9f9f9;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --card-hover: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
-            line-height: 1.6;
+            background-color: var(--dark-color);
             color: var(--text-color);
-            background-color: var(--light-color);
+            line-height: 1.7;
             overflow-x: hidden;
         }
-        
-        h1, h2, h3, h4 {
+
+        /* Custom Cursor */
+        .cursor {
+            width: 10px;
+            height: 10px;
+            border: 1px solid var(--secondary-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor2 {
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(255, 152, 0, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s, width 0.3s, height 0.3s, background-color 0.3s;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: rgba(255, 152, 0, 0.2);
+            border-color: transparent;
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-color);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4 {
             font-family: 'Playfair Display', serif;
-            font-weight: 900;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #fff;
         }
-        
+
         h1 {
-            font-size: 4.5rem;
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+            font-size: 5rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
-        
+
         h2 {
-            font-size: 3.5rem;
+            font-size: 3rem;
+            margin-bottom: 1rem;
             position: relative;
             display: inline-block;
         }
-        
-        h2:after {
+
+        h2::after {
             content: '';
             position: absolute;
             bottom: -10px;
-            left: 0;
-            width: 100px;
-            height: 5px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            border-radius: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
         }
-        
-        h3 {
-            font-size: 2.2rem;
-            color: var(--dark-color);
-        }
-        
+
         p {
             margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            color: var(--text-light);
+            color: var(--text-muted);
         }
-        
+
+        /* Layout & Container */
         .container {
             width: 90%;
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        
-        /* Header & Navigation */
+
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        /* Header */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 25px 0;
             z-index: 1000;
+            padding: 20px 0;
             transition: var(--transition);
-            background-color: rgba(26, 26, 26, 0.95);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         }
-        
+
         header.scrolled {
-            padding: 15px 0;
-            background-color: rgba(26, 26, 26, 0.98);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
         }
-        
+
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 900;
-            color: var(--light-color);
+            color: #fff;
             text-decoration: none;
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        
+
         .logo span {
-            color: var(--secondary-color);
+            color: var(--primary-color);
         }
-        
+
         .nav-links {
             display: flex;
             list-style: none;
+            gap: 40px;
         }
-        
-        .nav-links li {
-            margin-left: 40px;
-        }
-        
+
         .nav-links a {
-            color: var(--light-color);
+            color: #fff;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: var(--transition);
             position: relative;
-            padding: 5px 0;
+            opacity: 0.8;
         }
-        
-        .nav-links a:after {
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--secondary-color);
+            opacity: 1;
+        }
+
+        .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -5px;
             left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--secondary-color);
-            transition: var(--transition);
+            width: 0%;
+            height: 1px;
+            background: var(--secondary-color);
+            transition: width 0.3s ease;
         }
-        
-        .nav-links a:hover {
-            color: var(--secondary-color);
-        }
-        
-        .nav-links a:hover:after {
+
+        .nav-links a:hover::after {
             width: 100%;
         }
-        
+
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             display: flex;
             align-items: center;
+            justify-content: center;
             text-align: center;
-            color: var(--light-color);
+            background: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), var(--dark-color));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.8s;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            margin-top: 20px;
             position: relative;
             overflow: hidden;
         }
-        
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeUp 1s forwards 0.5s;
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
         }
-        
-        .hero h1 {
-            margin-bottom: 30px;
-            color: var(--light-color);
-        }
-        
-        .hero p {
-            font-size: 1.4rem;
-            margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.85);
-        }
-        
-        .btn {
-            display: inline-block;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            border: none;
-            cursor: pointer;
-        }
-        
+
         .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+            background: rgba(198, 40, 40, 0.1);
         }
-        
-        /* Menu Section */
-        .section {
-            padding: 120px 0;
+
+        .btn:hover::before {
+            left: 100%;
         }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-        
-        .section-title h2 {
-            color: var(--dark-color);
-        }
-        
+
+        /* Glass Menu Cards */
         .menu-categories {
             display: flex;
             justify-content: center;
-            margin-bottom: 60px;
+            gap: 15px;
+            margin-bottom: 50px;
             flex-wrap: wrap;
         }
-        
+
         .category-btn {
-            background: none;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 12px 30px;
-            margin: 0 10px 15px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: none;
             transition: var(--transition);
+            backdrop-filter: blur(10px);
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
         }
-        
-        .category-btn.active, .category-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: var(--shadow);
+
+        .category-btn.active,
+        .category-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.3);
         }
-        
+
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
         }
-        
+
         .menu-item {
-            background-color: white;
-            border-radius: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: var(--shadow);
+            backdrop-filter: blur(8px);
             transition: var(--transition);
             opacity: 0;
             transform: translateY(30px);
+            cursor: none;
         }
-        
+
         .menu-item.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .menu-item:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-10px);
+            background: var(--card-hover);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: var(--glass-shadow);
         }
-        
+
+        .menu-img-wrapper {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+
         .menu-img {
-            height: 250px;
             width: 100%;
+            height: 100%;
             object-fit: cover;
-            transition: var(--transition);
+            transition: transform 0.6s ease;
         }
-        
+
         .menu-item:hover .menu-img {
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
-        
+
         .menu-content {
             padding: 25px;
         }
-        
+
         .menu-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+            align-items: baseline;
+            margin-bottom: 10px;
         }
-        
+
         .menu-header h3 {
-            margin-bottom: 0;
+            font-size: 1.3rem;
+            margin: 0;
         }
-        
+
         .price {
-            font-size: 1.8rem;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--secondary-color);
             font-weight: 700;
-            color: var(--primary-color);
         }
-        
+
         .ingredients {
-            color: var(--text-light);
+            font-size: 0.9rem;
+            color: #888;
             font-style: italic;
-            margin-bottom: 20px;
         }
-        
+
         /* Drinks Section */
         .drinks-section {
-            background-color: var(--dark-color);
-            color: var(--light-color);
+            background: linear-gradient(to bottom, var(--dark-color), #1a1a1a);
         }
-        
-        .drinks-section h2, .drinks-section h3 {
-            color: var(--light-color);
-        }
-        
-        .drinks-section .price {
-            color: var(--secondary-color);
-        }
-        
-        .drinks-section .ingredients {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        /* About Section */
+
+        /* About Section Parallax */
         .about-section {
-            background: linear-gradient(135deg, var(--light-color) 0%, #e8e8e8 100%);
+            background-color: #151515;
+            overflow: hidden;
         }
-        
+
         .about-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 60px;
             align-items: center;
         }
-        
-        .about-text h2 {
-            margin-bottom: 30px;
-        }
-        
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-        
+
         .stat-item {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .stat-number {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--primary-color);
-            display: block;
-            line-height: 1;
-        }
-        
-        .stat-label {
-            font-size: 1.1rem;
-            color: var(--text-light);
-        }
-        
-        .about-image {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: var(--transition);
-        }
-        
-        .about-image:hover img {
-            transform: scale(1.03);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-            padding: 80px 0 30px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 50px;
-            margin-bottom: 50px;
-        }
-        
-        .footer-column h3 {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            color: var(--light-color);
-        }
-        
-        .footer-column h3:after {
-            background: linear-gradient(to right, var(--secondary-color), var(--primary-color));
-            bottom: -15px;
-        }
-        
-        .contact-info p {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .contact-info i {
-            margin-right: 15px;
-            color: var(--secondary-color);
-            font-size: 1.2rem;
-        }
-        
-        .social-links {
-            display: flex;
+            display: inline-block;
+            margin-right: 40px;
             margin-top: 30px;
         }
-        
-        .social-links a {
+
+        .stat-number {
+            display: block;
+            font-size: 4rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .stat-label {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+
+        .about-image {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 20px 20px 0 rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: translate(-10px, -10px);
+            box-shadow: 30px 30px 0 rgba(198, 40, 40, 0.2);
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 10001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #1a1a1a;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            margin-right: 15px;
-            color: var(--light-color);
-            font-size: 1.2rem;
             transition: var(--transition);
         }
-        
-        .social-links a:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-5px);
+
+        .modal-close:hover {
+            background: var(--primary-color);
+            transform: rotate(90deg);
         }
-        
+
+        .modal-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .modal-price {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            font-family: 'Playfair Display', serif;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 80px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
         .copyright {
             text-align: center;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.95rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+            color: #666;
         }
-        
-        /* Scroll Animations */
+
+        /* Utility Animations */
         @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-        
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            h1 {
-                font-size: 3.5rem;
-            }
-            
-            h2 {
-                font-size: 2.8rem;
-            }
-            
-            .nav-links li {
-                margin-left: 25px;
-            }
-            
-            .menu-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
-        
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-            }
-            
-            .logo {
-                margin-bottom: 20px;
-            }
-            
-            .nav-links {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            
-            .nav-links li {
-                margin: 0 15px 10px;
-            }
-            
-            .hero-content {
-                padding: 10px;
-            }
-            
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
             h1 {
                 font-size: 2.8rem;
             }
-            
+
             h2 {
-                font-size: 2.3rem;
+                font-size: 2rem;
             }
-            
+
             .section {
-                padding: 80px 0;
+                padding: 60px 0;
             }
-        }
-        
-        @media (max-width: 576px) {
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
             .menu-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .category-btn {
-                padding: 10px 20px;
-                font-size: 1rem;
+
+            .navbar {
+                justify-content: space-between;
+                padding: 0 10px;
             }
-            
-            .btn {
-                padding: 12px 30px;
+
+            .hamburger {
+                display: block;
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                gap: 0;
+                flex-direction: column;
+                background-color: var(--dark-color);
+                /* Fallback */
+                background-color: #0f0f0f;
+                width: 100%;
+                height: 100vh;
+                text-align: center;
+                transition: 0.3s;
+                justify-content: center;
+                z-index: 1000;
+                padding-top: 50px;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links li {
+                margin: 20px 0;
+            }
+
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+
+            .cursor,
+            .cursor2 {
+                display: none;
+            }
+
+            /* Hide custom cursor on touch devices */
+            * {
+                cursor: auto !important;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 0 auto;
             }
         }
     </style>
 </head>
+
 <body>
-    <!-- Header & Navigation -->
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor2"></div>
+
+    <!-- Header -->
     <header id="header">
         <div class="container">
             <nav class="navbar">
-                <a href="#" class="logo">Mirror<span></span></a>
+                <a href="#" class="logo">Mirror<span>.</span></a>
                 <ul class="nav-links">
                     <li><a href="#home">Kryesore</a></li>
                     <li><a href="#food">Ushqimi</a></li>
                     <li><a href="#drinks">Pijet</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Kontakti</a></li>
+                    <li><a href="#about">Rreth Nesh</a></li>
+                    <li><a href="#contact">Kontakt</a></li>
                 </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Përsosmëria në kuzhinë ju pret</h1>
-                <p>Përjetoni një simfoni shijesh të krijuara nga stafi jone perfekt.</p>
-                <a href="#food" class="btn">Eksploro menyn tone</a>
-            </div>
+        <div class="hero-content">
+            <h1>Përsosmëria në Kuzhinë</h1>
+            <p>Një simfoni shijesh të krijuara me pasion dhe elegancë.</p>
+            <a href="#food" class="btn hover-trigger">Eksploro Menynë</a>
         </div>
     </section>
 
-    <!-- Food Menu Section -->
+    <!-- Food Menu -->
     <section class="section" id="food">
         <div class="container">
-            <div class="section-title">
-                <h2>Te preferuarat</h2>
-                <p>Ushqime me shume shije</p>
+            <div class="section-title reveal">
+                <h2>Te Preferuarat</h2>
+                <p>Eksploroni pjatat tona më të pëlqyera</p>
             </div>
-            
-            <div class="menu-categories">
-                <button class="category-btn active" data-category="all">Te Gjitha</button>
-                <button class="category-btn" data-category="appetizer">Paragjellat</button>
-                <button class="category-btn" data-category="main">Piata Kryesore</button>
-                <button class="category-btn" data-category="dessert">Dessertet</button>
+
+            <div class="menu-categories reveal">
+                <button class="category-btn active hover-trigger" data-category="all">Te Gjitha</button>
+                <button class="category-btn hover-trigger" data-category="appetizer">Paragjellat</button>
+                <button class="category-btn hover-trigger" data-category="main">Pjata Kryesore</button>
+                <button class="category-btn hover-trigger" data-category="dessert">Ëmbëlsirat</button>
             </div>
-            
+
             <div class="menu-grid" id="food-menu">
-                <!-- Food items will be loaded here by JavaScript -->
+                <!-- Items loaded via JS -->
             </div>
         </div>
     </section>
 
-    <!-- Drinks Menu Section -->
+    <!-- Drinks Menu -->
     <section class="section drinks-section" id="drinks">
         <div class="container">
-            <div class="section-title">
-                <h2>Pijet</h2>
-                <p>Pijet me te mira</p>
+            <div class="section-title reveal">
+                <h2>Pijet Ekskluzive</h2>
+                <p>Kokteile artizanale dhe verëra të zgjedhura</p>
             </div>
-            
-            <div class="menu-categories">
-                <button class="category-btn active" data-category="all">Te gjitha</button>
-                <button class="category-btn" data-category="cocktail">Koktellat</button>
-                <button class="category-btn" data-category="wine">Verat</button>
-                <button class="category-btn" data-category="non-alcoholic">Pijet Jo Alkoolike</button>
+
+            <div class="menu-categories reveal">
+                <button class="category-btn active hover-trigger" data-category="all">Te Gjitha</button>
+                <button class="category-btn hover-trigger" data-category="cocktail">Kokteile</button>
+                <button class="category-btn hover-trigger" data-category="wine">Verëra</button>
+                <button class="category-btn hover-trigger" data-category="non-alcoholic">Pa Alkool</button>
             </div>
-            
+
             <div class="menu-grid" id="drinks-menu">
-                <!-- Drink items will be loaded here by JavaScript -->
+                <!-- Items loaded via JS -->
             </div>
         </div>
     </section>
@@ -622,27 +809,28 @@
     <section class="section about-section" id="about">
         <div class="container">
             <div class="about-content">
-                <div class="about-text">
-                    <h2>Filozofia jonë ne Mirror
-                    </h2>
-                    <p>Në Mirror, ne besojmë se ngrënia duhet të jetë një përvojë e paharrueshme që angazhon të gjitha shqisat.</p>
-                    <p>Çdo pjatë në menunë tonë përgatitet me një vëmendje të imët ndaj detajeve, që nga gjetja e përbërësve deri te prezantimi përfundimtar.</p>
-                    
+                <div class="about-text reveal">
+                    <h2>Filozofia e Mirror</h2>
+                    <p>Ne besojmë se ushqimi është më shumë se thjesht lëndë djegëse - është një formë arti. Çdo pjatë
+                        tregon një histori, çdo kafshatë është një kujtim.</p>
+                    <p>Me përbërësit më të freskët lokalë dhe teknikat moderne të gatimit, ne sjellim në tavolinën tuaj
+                        një eksperiencë të paharrueshme.</p>
+
                     <div class="stats">
                         <div class="stat-item">
                             <span class="stat-number" data-count="5">0</span>
-                            <span class="stat-label">Vitet ne eksperience</span>
+                            <span class="stat-label">Vite Eksperiencë</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-number" data-count="50">0</span>
-                            <span class="stat-label">Gjerat ne meny</span>
+                            <span class="stat-label">Pjata Unike</span>
                         </div>
-                        
                     </div>
                 </div>
-                
-                <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1554679665-f5537f187268?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Chef preparing food">
+
+                <div class="about-image reveal">
+                    <img src="https://images.unsplash.com/photo-1554679665-f5537f187268?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80"
+                        alt="Chef">
                 </div>
             </div>
         </div>
@@ -652,187 +840,120 @@
     <footer id="contact">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Mirror</h3>
-                    <p>Ku arti i kuzhinës takon përvoja të paharrueshme ngrënieje.</p>
+                <div class="footer-column reveal">
+                    <h3>Mirror.</h3>
+                    <p>Ku arti i kuzhinës takon përvoja të paharrueshme.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-tripadvisor"></i></a>
+                        <a href="#" class="hover-trigger"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover-trigger"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover-trigger"><i class="fab fa-twitter"></i></a>
                     </div>
                 </div>
-                
-                <div class="footer-column">
-                    <h3>Contact Info</h3>
-                    <div class="contact-info">
-                        <p><i class="fas fa-map-marker-alt"></i>Rruga Shaqir Ingrishta</p>
-                        <p><i class="fas fa-phone"></i>(+383) 44 xxx xxx</p>
-                        
-                        <p><i class="fas fa-clock"></i> E Hene - E Diele: 7AM - 11PM</p>
-                    </div>
+
+                <div class="footer-column reveal">
+                    <h3>Na Kontaktoni</h3>
+                    <p><i class="fas fa-map-marker-alt" style="margin-right:10px; color:var(--primary-color)"></i> Rruga
+                        Shaqir Ingrishta</p>
+                    <p><i class="fas fa-phone" style="margin-right:10px; color:var(--primary-color)"></i> (+383) 44 123
+                        456</p>
+                    <p><i class="fas fa-clock" style="margin-right:10px; color:var(--primary-color)"></i> Hënë - Djelë:
+                        07:00 - 23:00</p>
                 </div>
-                
-                <div class="footer-column">
-                    <h3>Rezervimet</h3>
-                    <p>Rezervoni Tavolonat</p>
-                    <a href="#" class="btn">Book a Table</a>
+
+                <div class="footer-column reveal">
+                    <h3>Rezervime</h3>
+                    <p>Siguroni vendin tuaj për një mbrëmje speciale.</p>
+                    <a href="#" class="btn hover-trigger" style="margin-top:10px">Rezervo Tani</a>
                 </div>
             </div>
-            
             <div class="copyright">
-                <p>&copy; 2022 Mirror.| Dizajnuar me pasion</p>
+                <p>&copy; 2024 Mirror Restaurant. Të gjitha të drejtat e rezervuara.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Details Modal -->
+    <div class="modal" id="itemModal">
+        <div class="modal-content">
+            <span class="modal-close hover-trigger">&times;</span>
+            <img src="" alt="" class="modal-img" id="modalImg">
+            <div class="modal-body">
+                <h3 class="modal-title" id="modalTitle">Dish Name</h3>
+                <span class="modal-price" id="modalPrice">$00</span>
+                <p id="modalDesc">Dish description goes here.</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Menu Data
+        // Data
         const foodItems = [
-            {
-                id: 1,
-                name: "Gjelle",
-                category: "main",
-                price: 32,
-                ingredients: "Arborio rice, black truffle, Parmesan, white wine, mushroom broth",
-                image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-            },
-            {
-                id: 2,
-                name: "Risoto",
-                category: "appetizer",
-                price: 26,
-                ingredients: "Atlantic scallops, pea puree, pancetta, lemon beurre blanc",
-                image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-            },
-            {
-                id: 3,
-                name: "Chocolate Soufflé",
-                category: "dessert",
-                price: 18,
-                ingredients: "Dark chocolate, eggs, sugar, vanilla bean, cocoa powder",
-                image: "https://images.unsplash.com/photo-1623334044303-241021148842?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            },
-            {
-                id: 4,
-                name: "Biftek",
-                category: "main",
-                price: 68,
-                ingredients: "A5 Wagyu, truffle mashed potatoes, grilled asparagus, red wine reduction",
-                image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            },
-            {
-                id: 5,
-                name: "Burrata Caprese",
-                category: "appetizer",
-                price: 22,
-                ingredients: "Fresh burrata, heirloom tomatoes, basil pesto, balsamic reduction",
-                image: "https://images.unsplash.com/photo-1598214886806-c87b84b7078b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2050&q=80"
-            },
-            {
-                id: 6,
-                name: "Matcha Tiramisu",
-                category: "dessert",
-                price: 16,
-                ingredients: "Matcha powder, mascarpone, ladyfingers, espresso, cocoa",
-                image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            }
+            { id: 1, name: "Gjelle Tradicionale", category: "main", price: 32, ingredients: "Arborio rice, black truffle, Parmesan, white wine", image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80" },
+            { id: 2, name: "Risoto Deti", category: "appetizer", price: 26, ingredients: "Atlantic scallops, pea puree, pancetta, lemon", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80" },
+            { id: 3, name: "Chocolate Soufflé", category: "dessert", price: 18, ingredients: "Dark chocolate, eggs, sugar, vanilla bean", image: "https://images.unsplash.com/photo-1623334044303-241021148842?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" },
+            { id: 4, name: "Wagyu Biftek", category: "main", price: 68, ingredients: "A5 Wagyu, truffle mashed potatoes, asparagus", image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" },
+            { id: 5, name: "Burrata Caprese", category: "appetizer", price: 22, ingredients: "Fresh burrata, heirloom tomatoes, basil pesto", image: "https://images.unsplash.com/photo-1598214886806-c87b84b7078b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2050&q=80" },
+            { id: 6, name: "Matcha Tiramisu", category: "dessert", price: 16, ingredients: "Matcha powder, mascarpone, ladyfingers", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" }
         ];
 
         const drinkItems = [
-            {
-                id: 1,
-                name: "Elderflower Martini",
-                category: "cocktail",
-                price: 16,
-                ingredients: "Gin, St. Germain, lime juice, cucumber, mint",
-                image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            },
-            {
-                id: 2,
-                name: "Barolo 'Riserva' 2015",
-                category: "wine",
-                price: 95,
-                ingredients: "Nebbiolo grapes, aged in oak barrels, full-bodied",
-                image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-            },
-            {
-                id: 3,
-                name: "Botanical Garden",
-                category: "non-alcoholic",
-                price: 12,
-                ingredients: "Cucumber, basil, lime, elderflower syrup, soda",
-                image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2064&q=80"
-            },
-            {
-                id: 4,
-                name: "Smoked Old Fashioned",
-                category: "cocktail",
-                price: 18,
-                ingredients: "Bourbon, demerara syrup, aromatic bitters, smoked with applewood",
-                image: "https://images.unsplash.com/photo-1609951651556-5334e2706168?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-            },
-            {
-                id: 5,
-                name: "Sancerre Blanc 2021",
-                category: "wine",
-                price: 65,
-                ingredients: "Sauvignon Blanc, crisp and mineral-forward",
-                image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-            },
-            {
-                id: 6,
-                name: "Ginger Hibiscus Fizz",
-                category: "non-alcoholic",
-                price: 10,
-                ingredients: "Hibiscus tea, ginger syrup, lemon, sparkling water",
-                image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2157&q=80"
-            }
+            { id: 1, name: "Elderflower Martini", category: "cocktail", price: 16, ingredients: "Gin, St. Germain, lime juice, cucumber", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" },
+            { id: 2, name: "Barolo 'Riserva'", category: "wine", price: 95, ingredients: "Nebbiolo grapes, aged in oak barrels", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" },
+            { id: 3, name: "Botanical Garden", category: "non-alcoholic", price: 12, ingredients: "Cucumber, basil, lime, elderflower syrup", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=2064&q=80" },
+            { id: 4, name: "Smoked Old Fashioned", category: "cocktail", price: 18, ingredients: "Bourbon, demerara, aromatic bitters", image: "https://images.unsplash.com/photo-1609951651556-5334e2706168?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80" },
+            { id: 5, name: "Sancerre Blanc", category: "wine", price: 65, ingredients: "Sauvignon Blanc, crisp and mineral-forward", image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1974&q=80" },
+            { id: 6, name: "Ginger Fizz", category: "non-alcoholic", price: 10, ingredients: "Hibiscus tea, ginger syrup, lemon", image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2157&q=80" }
         ];
 
-        // DOM Elements
-        const header = document.getElementById('header');
-        const foodMenuContainer = document.getElementById('food-menu');
-        const drinksMenuContainer = document.getElementById('drinks-menu');
-        const foodCategoryBtns = document.querySelectorAll('#food .category-btn');
-        const drinksCategoryBtns = document.querySelectorAll('#drinks .category-btn');
-        const statNumbers = document.querySelectorAll('.stat-number');
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.cursor');
+        const cursor2 = document.querySelector('.cursor2');
 
-        // Initialize menus
-        function initializeMenus() {
-            renderMenuItems(foodItems, foodMenuContainer);
-            renderMenuItems(drinkItems, drinksMenuContainer);
-            
-            // Add event listeners for food category buttons
-            foodCategoryBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    foodCategoryBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    filterMenuItems(foodItems, foodMenuContainer, this.dataset.category);
-                });
-            });
-            
-            // Add event listeners for drinks category buttons
-            drinksCategoryBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    drinksCategoryBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    filterMenuItems(drinkItems, drinksMenuContainer, this.dataset.category);
-                });
-            });
-        }
+        document.addEventListener('mousemove', function (e) {
+            cursor.style.cssText = cursor2.style.cssText = "left: " + e.clientX + "px; top: " + e.clientY + "px;";
+        });
 
-        // Render menu items
-        function renderMenuItems(items, container) {
+        document.querySelectorAll('.hover-trigger, a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('cursor-hover');
+                cursor2.classList.add('cursor-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-hover');
+                cursor2.classList.remove('cursor-hover');
+            });
+        });
+
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        });
+
+        // Header Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // Menu Rendering
+        function renderMenu(items, containerId) {
+            const container = document.getElementById(containerId);
             container.innerHTML = '';
-            
-            items.forEach(item => {
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item';
-                menuItem.dataset.category = item.category;
-                
-                menuItem.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="menu-img">
+            items.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'menu-item hover-trigger';
+                el.dataset.category = item.category;
+                // Staggered delay for animation
+                el.style.transitionDelay = `${index * 100}ms`;
+                el.innerHTML = `
+                    <div class="menu-img-wrapper">
+                        <img src="${item.image}" alt="${item.name}" class="menu-img">
+                    </div>
                     <div class="menu-content">
                         <div class="menu-header">
                             <h3>${item.name}</h3>
@@ -841,114 +962,115 @@
                         <p class="ingredients">${item.ingredients}</p>
                     </div>
                 `;
-                
-                container.appendChild(menuItem);
+
+                // Add click event for modal
+                el.addEventListener('click', () => openModal(item));
+
+                container.appendChild(el);
             });
-            
-            // Animate items on load
-            setTimeout(() => {
-                const menuItems = container.querySelectorAll('.menu-item');
-                menuItems.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.classList.add('visible');
-                    }, index * 150);
-                });
-            }, 100);
         }
 
-        // Filter menu items by category
-        function filterMenuItems(items, container, category) {
-            const filteredItems = category === 'all' 
-                ? items 
-                : items.filter(item => item.category === category);
-            
-            renderMenuItems(filteredItems, container);
-        }
+        renderMenu(foodItems, 'food-menu');
+        renderMenu(drinkItems, 'drinks-menu');
 
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
+        // Hamburger Menu Logic
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("active");
         });
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
+        document.querySelectorAll(".nav-links li a").forEach(n => n.addEventListener("click", () => {
+            hamburger.classList.remove("active");
+            navMenu.classList.remove("active");
+        }));
+
+        // Filtering
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const category = this.dataset.category;
+                const container = this.closest('.section').querySelector('.menu-grid');
+                const isFood = container.id === 'food-menu';
+                const items = isFood ? foodItems : drinkItems;
+
+                // Active state
+                this.parentElement.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Filter
+                const filtered = category === 'all' ? items : items.filter(i => i.category === category);
+                renderMenu(filtered, container.id);
+
+                // Re-trigger animations
+                container.querySelectorAll('.menu-item').forEach(item => {
+                    item.classList.remove('visible');
+                    setTimeout(() => item.classList.add('visible'), 50);
+                });
+            });
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('itemModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPrice = document.getElementById('modalPrice');
+        const modalDesc = document.getElementById('modalDesc');
+        const closeBtn = document.querySelector('.modal-close');
+
+        function openModal(item) {
+            modalImg.src = item.image;
+            modalTitle.textContent = item.name;
+            modalPrice.textContent = `$${item.price}`;
+            modalDesc.textContent = item.ingredients + ". A delicious choice prepared by our best chefs.";
+            modal.classList.add('active');
+        }
+
+        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+
+        // Scroll Reveal & Stats
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    if (entry.target.classList.contains('menu-item')) {
+                        entry.target.classList.add('visible'); // For menu items
+                    }
+                    if (entry.target.classList.contains('about-text')) {
+                        animateStats(); // Trigger stats only once
+                        observer.unobserve(entry.target);
+                    }
                 }
             });
-        });
+        }, { threshold: 0.1 });
 
-        // Animate stats counters
-        function animateCounters() {
-            statNumbers.forEach(stat => {
-                const target = parseInt(stat.dataset.count);
-                const increment = target / 100;
+        document.querySelectorAll('.reveal, .menu-item').forEach(el => observer.observe(el));
+
+        // Stats Animation
+        let statsAnimated = false;
+        function animateStats() {
+            if (statsAnimated) return;
+            statsAnimated = true;
+            document.querySelectorAll('.stat-number').forEach(stat => {
+                const target = +stat.dataset.count;
+                const step = target / 50;
                 let current = 0;
-                
                 const timer = setInterval(() => {
-                    current += increment;
+                    current += step;
                     if (current >= target) {
                         stat.textContent = target;
                         clearInterval(timer);
                     } else {
-                        stat.textContent = Math.floor(current);
+                        stat.textContent = Math.ceil(current);
                     }
-                }, 20);
+                }, 30);
             });
         }
-
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Animate stats when about section is in view
-                    if (entry.target.id === 'about') {
-                        animateCounters();
-                        observer.unobserve(entry.target);
-                    }
-                    
-                    // Animate menu items when in view
-                    if (entry.target.classList.contains('menu-item')) {
-                        entry.target.classList.add('visible');
-                    }
-                }
-            });
-        }, observerOptions);
-
-        // Observe all menu items and about section
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeMenus();
-            
-            // Observe menu items for animation
-            document.querySelectorAll('.menu-item').forEach(item => {
-                observer.observe(item);
-            });
-            
-            // Observe about section for counter animation
-            const aboutSection = document.getElementById('about');
-            if (aboutSection) {
-                observer.observe(aboutSection);
-            }
-        });
     </script>
 </body>
+
 </html>
